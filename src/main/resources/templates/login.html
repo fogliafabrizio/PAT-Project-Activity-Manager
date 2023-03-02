@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <div th:replace="~{fragments/header}"></div>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="container main">
+        <div class="row">
+            <div class="col-md-6 side-image">
+                <!-------Image-------->
+                <img src="img/logo.png" alt="logo">
+                <div class="text">
+                    <p>PAT Project Activity Tracker</p>
+                </div>
+            </div>
+            <div class="col-md-6 right">
+                <div class="input-box">
+                    <header>Login</header>
+                    <form action="@{/api/v1/auth/auth}" method="post">
+                    <div class="input-field">
+                        <input type="text" class="input" id="email" required autocomplete="off">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" class="input" id="password" required>
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="submit" class="submit" value="Accedi">
+
+                    </div>
+                    <div class="signin">
+                        <span>Hai dimenticato la password? <a href="#">Clicca qui</a></span>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
