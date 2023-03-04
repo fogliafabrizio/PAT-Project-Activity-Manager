@@ -23,13 +23,13 @@
             <div class="col-md-6 right">
                 <div class="input-box">
                     <header>Login</header>
-                    <form action="@{/api/v1/auth/auth}" method="post">
+                    <form th:action="@{/api/v1/auth/auth2}" method="post" th:object="${authRequest}">
                     <div class="input-field">
-                        <input type="text" class="input" id="email" required autocomplete="off">
+                        <input type="text" class="input" id="email" required autocomplete="off" th:field="*{email}">
                         <label for="email">Email</label>
                     </div>
                     <div class="input-field">
-                        <input type="password" class="input" id="password" required>
+                        <input type="password" class="input" id="password" required th:field="*{password}">
                         <label for="password">Password</label>
                     </div>
                     <div class="input-field">
@@ -40,6 +40,12 @@
                         <span>Hai dimenticato la password? <a href="#">Clicca qui</a></span>
                     </div>
                     </form>
+                    <!-- Mostra il messaggio di errore -->
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                    <!-- Mostra il messaggio di successo -->
+                    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
                 </div>
             </div>
         </div>

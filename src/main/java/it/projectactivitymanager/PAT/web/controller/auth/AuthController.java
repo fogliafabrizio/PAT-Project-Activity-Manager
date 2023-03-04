@@ -1,15 +1,21 @@
 package it.projectactivitymanager.PAT.web.controller.auth;
 
+import io.micrometer.common.util.StringUtils;
 import it.projectactivitymanager.PAT.config.security.AuthenticationService;
 import it.projectactivitymanager.PAT.web.request.AuthenticationRequest;
 import it.projectactivitymanager.PAT.web.request.RegisterRequest;
 import it.projectactivitymanager.PAT.web.response.AuthenticationResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+import javax.security.sasl.AuthenticationException;
+
+@Controller
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
@@ -31,15 +37,23 @@ public class AuthController {
     }
 
     @PostMapping("/auth2")
-    public String auth2(
-            @ModelAttribute AuthenticationRequest request
-    ){
+    public String auth2(@ModelAttribute("authRequest") AuthenticationRequest request, Model model, HttpServletResponse response) {
+        System.out.println("Email: " + request.getEmail());
+        System.out.println("Password: " + request.getPassword());
         AuthenticationResponse authenticationResponse = service.authenticate(request);
-        if(authenticationResponse.getToken() != null) {
-            // todo settare Token all'utente
-            return "demo";
-        } else {
-            return "login";
-        }
+        String jwtToken = authenticationResponse.getToken();
+
+        // Controlla se il token è null o vuoto
+            if (StringUtils.isEmpty(jwtToken)) {
+                // Se è null o vuoto, l'autenticazione non è andata a buon fine, rimanda l'utente alla pagina di login
+                return "redirect:/login?error";
+            }
+
+        // Aggiungi il token nell'header della risposta
+                response.setHeader("Authorization", "Bearer " + jwtToken);
+
+        // rimanda l'utente alla pagina demo.html
+                return "demo";
     }
+
 }
